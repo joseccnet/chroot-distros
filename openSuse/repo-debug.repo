@@ -1,0 +1,8 @@
+[repo-debug]
+name=openSUSE-versionopensuse-Debug
+enabled=0
+autorefresh=1
+baseurl=http://download.opensuse.org/debug/distribution/versionopensuse/repo/oss/
+path=/
+type=NONE
+keeppackages=0

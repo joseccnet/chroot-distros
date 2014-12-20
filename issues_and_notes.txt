@@ -1,0 +1,11 @@
+
+Jaula con OpenSuse
++ Cuando instalamos OpenSuse 13.2 en un ambiente Centos 6.x, NO es posible terminar una instalacion exitosa. Se obtienen mensajes como 'FATAL: kernel too old'. 
+
+Jaula con KALI LINUX:
++ Cuando ejecutamos apt-get, ejemplo: "apt-get update", obtenemos un error como:
+   W: GPG error: http://http.kali.org kali Release: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY ED444FF07D8D0BF6
+
+   Solucion: Ejecutar
+   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED444FF07D8D0BF6
+   Nota: Reemplazar ED444FF07D8D0BF6 por el codigo de error propio.

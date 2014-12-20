@@ -1,0 +1,7 @@
+[repo-update-non-oss]
+name=openSUSE-versionopensuse-Update-Non-Oss
+enabled=1
+autorefresh=1
+baseurl=http://download.opensuse.org/update/versionopensuse-non-oss/
+type=NONE
+keeppackages=0

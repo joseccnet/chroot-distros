@@ -1,0 +1,7 @@
+[repo-update]
+name=openSUSE-versionopensuse-Update
+enabled=1
+autorefresh=1
+baseurl=http://download.opensuse.org/update/versionopensuse/
+type=NONE
+keeppackages=0

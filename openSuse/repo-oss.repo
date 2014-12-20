@@ -1,0 +1,7 @@
+[repo-oss]
+name=openSUSE-versionopensuse-Oss
+enabled=1
+autorefresh=1
+baseurl=http://download.opensuse.org/distribution/versionopensuse/repo/oss/
+type=NONE
+keeppackages=0
