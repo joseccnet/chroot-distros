@@ -13,6 +13,7 @@ Descripción:
 + Instalar/configurar el repositorio EPEL para Centos 6: rpm -ivh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 + Instalar el paquete 'debootstrap': yum install debootstrap (Disponible en el repositorio EPEL)
 + Descargar/clonar este proyecto con git: git clone https://github.com/joseccnet/chroot-distros.git
++ cd chroot-distros ; chmod 700 *.sh
 
 Estas listo para instalar ambientes 'chroot' (Debian, Ubuntu, Centos, Fedora, OpenSuse o KaliLinux) completos:
 
