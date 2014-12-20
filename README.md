@@ -12,14 +12,14 @@ Descripción:
 + Tener instalado un sistema operativo Linux basado 'Centos 6 x86_64'(Por el momento lo desarrollé para esta distribución).
 + Instalar/configurar el repositorio EPEL para Centos 6: rpm -ivh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 + Instalar el paquete 'debootstrap': yum install debootstrap (Disponible en el repositorio EPEL)
-+ Descargar/clonar este proyecto con git.
++ Descargar/clonar este proyecto con git: git clone https://github.com/joseccnet/chroot-distros.git
 
 Estas listo para instalar ambientes 'chroot' (Debian, Ubuntu, Centos, Fedora, OpenSuse o KaliLinux) completos:
 
 + En el archivo 'chroot.conf', revise y configure la variable de ambiente ROOTJAIL (default: ROOTJAIL=/opt/jaulas)
 + Revise y ejecute con el usuario root el script 'install-all-versions.sh', observará algo como esto:
 
-# ./install-all-versions.sh
+\# ./install-all-versions.sh
 
 Para continuar, Ejecute:
    ./install-all-versions.sh I_AM_AGREE NombreDistro &
