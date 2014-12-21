@@ -32,7 +32,7 @@ mkdir -p $CHROOT
 
 version=$2
 arch=$3
-if [ "$arch" == "" ] ; then arch=$(uname -p); fi
+if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
 if [ "$version" == "" ] ; then version="wheezy"; fi
 echo "Instalando..."

@@ -1,8 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 #
 #
 # Author: josecc@gmail.com
 source $(dirname $0)/chroot.conf
+
+if ! [ -f /sbin/fuser -o -f /bin/fuser ] ; then echo -e "\nInstale el paquete psmisc: yum install psmisc\nor\n apt-get install psmisc"; exit -1; fi
 
 if [ "$1" == "status" ] ; then
    echo -e "+ Se muestran procesos(si existen) en cada una de las jaulas dentro de $ROOTJAIL :\n"
@@ -76,14 +78,14 @@ if [ "$2" == "umount" ] ; then
       umount $i
       if [ "$?" != "0" ] ; then
          echo -e "ATENCION!!!! no se pudo desmontar $i . Existen procesos ejecutandose dentro de la jaula:"
-         /sbin/fuser -v $CHROOT
+         fuser -v $CHROOT
          echo -e "\n Indique si quiere terminar con kill los procesos..."
-         /sbin/fuser -ik $CHROOT
+         fuser -ik $CHROOT
          echo -e "*** Por favor ejecute NUEVAMENTE el comando para asegurar que se desmontaron todos los File Systems ***"
          exit -1
       fi
    done
-   /sbin/fuser -k $CHROOT #Fuerza matar procesos dentro de la jaula.
+   fuser -k $CHROOT #Fuerza matar procesos dentro de la jaula.
 
 elif [ "$2" == "mount" ] ; then
    if [ ! -f $CHROOT/etc/mychroot.conf ] ; then echo "No existe archivo de configuracion $CHROOT/etc/mychroot.conf. Saliendo"; exit -1; fi

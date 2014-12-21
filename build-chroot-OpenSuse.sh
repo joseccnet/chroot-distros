@@ -4,10 +4,11 @@
 # Author: josecc@gmail.com
 source $(dirname $0)/chroot.conf
 
+if [ ! -f /usr/bin/yum ] ; then echo -e "Favor de instalar Yum:\n   apt-get install yum yum-utils\n\nEn debian, es necesario agregar el repositorio 'wheezy-backports'. Revisa el archivo issues_and_notes.txt"; exit -1; fi
+
 echo " - - - - - - - - - - - - - - - - - -"
 echo -e "$0 creara una jaula dentro del directorio $ROOTJAIL/$1\n"
 echo -e " - - - - - - - - - - - - - - - - - -\n"
-
 
 if [ "$1" == "" ]; then
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
@@ -24,7 +25,7 @@ version=$2
 
 arch=$3
 if [ "$arch" == "" ] ; then arch="x86_64"; fi
-excludearch='"*.i586"'
+excludearch="*.i586"
 if [ "$arch" == "i586" ] ; then excludearch="*.x86_64"; fi
 
 if [ "$version" == "13.2" ] ; then

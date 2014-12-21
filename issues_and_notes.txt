@@ -9,3 +9,13 @@ Jaula con KALI LINUX:
    Solucion: Ejecutar
    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED444FF07D8D0BF6
    Nota: Reemplazar ED444FF07D8D0BF6 por el codigo de error propio.
+
++ Instalación de 'yum' y 'yum-utils' en Debian. Instrucciones completas en http://backports.debian.org/Instructions/
+
+For squeeze add this line:
+   echo 'deb http://http.debian.net/debian-backports squeeze-backports(-sloppy) main' >> /etc/apt/sources.list
+   apt-get -t squeeze-backports install yum yum-utils
+
+For wheezy add this line:
+   echo 'deb http://http.debian.net/debian wheezy-backports main' >> /etc/apt/sources.list
+   apt-get -t wheezy-backports install yum yum-utils

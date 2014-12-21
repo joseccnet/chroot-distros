@@ -38,11 +38,21 @@ mkdir -p $CHROOT
 
 version=$2
 arch=$3
-if [ "$arch" == "" ] ; then arch=$(uname -p); fi
+if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
 if [ "$version" == "" ] ; then version="vivid"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
+
+#Hacer que debootstrap me permita instalar Ubuntu LINUX:
+if [ -d /usr/share/debootstrap/scripts ] ; then
+   if [ ! -f /usr/share/debootstrap/scripts/$version ] ; then
+      ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/$version
+   fi
+else
+   echo -e "Version de debootstrap no soporta instalar Kali Linux. Salir.\n"
+   exit -1
+fi
 
 if [ "$version" == "vivid" ] ; then
    #Default:

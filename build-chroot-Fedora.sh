@@ -4,12 +4,14 @@
 # Author: josecc@gmail.com
 source $(dirname $0)/chroot.conf
 
+if [ ! -f /usr/bin/yum ] ; then echo -e "Favor de instalar Yum:\n   apt-get install yum yum-utils\n\nEn debian, es necesario agregar el repositorio 'wheezy-backports'. Revisa el archivo issues_and_notes.txt"; exit -1; fi
+
 echo " - - - - - - - - - - - - - - - - - -"
 echo -e "$0 creara una jaula dentro del directorio $ROOTJAIL/$1\n"
 echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
-if [ ! -f /usr/lib64/python2.6/site-packages/liblzma.py ] ; then echo -e "Instale 'pyliblzma': yum install pyliblzma"; exit -1; fi
+if ! [ -f /usr/lib64/python2.6/site-packages/liblzma.py -o -f /usr/share/pyshared/liblzma.py ] ; then echo -e "   Instale 'pyliblzma': yum install pyliblzma\n -or-\n   apt-get install python-lzma"; exit -1; fi
 
 if [ "$1" == "" ]; then
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
