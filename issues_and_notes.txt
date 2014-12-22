@@ -10,7 +10,7 @@ Jaula con KALI LINUX:
    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED444FF07D8D0BF6
    Nota: Reemplazar ED444FF07D8D0BF6 por el codigo de error propio.
 
-+ Instalación de 'yum' y 'yum-utils' en Debian. Instrucciones completas en http://backports.debian.org/Instructions/
++ Instalación de 'yum-utils' en Debian(NO necesario para 'yum'). Instrucciones completas en http://backports.debian.org/Instructions/
 
 For squeeze add this line:
    echo 'deb http://http.debian.net/debian-backports squeeze-backports(-sloppy) main' >> /etc/apt/sources.list

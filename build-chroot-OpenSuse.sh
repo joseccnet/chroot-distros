@@ -4,7 +4,7 @@
 # Author: josecc@gmail.com
 source $(dirname $0)/chroot.conf
 
-if [ ! -f /usr/bin/yum ] ; then echo -e "Favor de instalar Yum:\n   apt-get install yum yum-utils\n\nEn debian, es necesario agregar el repositorio 'wheezy-backports'. Revisa el archivo issues_and_notes.txt"; exit -1; fi
+if [ ! -f /usr/bin/yum ] ; then echo -e "Favor de instalar Yum:\n   apt-get install yum\n"; exit -1; fi
 
 echo " - - - - - - - - - - - - - - - - - -"
 echo -e "$0 creara una jaula dentro del directorio $ROOTJAIL/$1\n"

@@ -4,12 +4,11 @@
 # Author: josecc@gmail.com
 source $(dirname $0)/chroot.conf
 
-if [ ! -f /usr/bin/yum ] ; then echo -e "Favor de instalar Yum:\n   apt-get install yum yum-utils\n\nEn debian, es necesario agregar el repositorio 'wheezy-backports'. Revisa el archivo issues_and_notes.txt"; exit -1; fi
+if [ ! -f /usr/bin/yum ] ; then echo -e "Favor de instalar Yum:\n   apt-get install yum\n"; exit -1; fi
 
 echo " - - - - - - - - - - - - - - - - - -"
 echo -e "$0 creara una jaula dentro del directorio $ROOTJAIL/$1\n"
 echo -e " - - - - - - - - - - - - - - - - - -\n"
-
 
 if [ "$1" == "" ]; then
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
@@ -33,6 +32,7 @@ if [ "$version" == "7" ] ; then
    wget -c $c7rpm1
 elif [ "$version" == "7-i386" ] ; then
    echo -e "Version NO soportada por el sitio oficial de Centos. Ver http://mirror.centos.org/centos/7/"
+   rm -rf $CHROOT
    exit 0
 elif [ "$version" == "6" ] ; then
    yumcentosconf=$CHROOT/tmp/yumcentos.conf
@@ -54,12 +54,12 @@ else
    yumdownloader centos-release
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
-rpm -i --root=$CHROOT --nodeps centos-release-*.rpm
+mkdir -p $CHROOT/tmp/ ; cp centos-release-*.rpm $CHROOT/tmp/
+rpm -ivh --root=$CHROOT --nodeps $CHROOT/tmp/centos-release-*.rpm
 
-mkdir -p $CHROOT/tmp
 cp $(dirname $0)/centos/yumcentos.conf $CHROOT/tmp/
 cp $(dirname $0)/centos/yumcentosi386.conf $CHROOT/tmp/
-yum --nogpgcheck -c $yumcentosconf --disablerepo=* --enablerepo=basecentoschroot --enablerepo=updatescentoschroot --installroot=$CHROOT install -y $paquetesadiocionales
+yum --nogpgcheck -c $yumcentosconf --disablerepo=* --enablerepo=basecentoschroot --enablerepo=updatescentoschroot --installroot=$CHROOT install -y yum yum-utils
 
 mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHROOT. El archivo $CHROOT/etc/mychroot.conf segun necesidades.\n\n#Filesystems a montar:
 \nFS:/proc\nFS:/dev\nFS:/dev/pts\nFS:/sys\nFS:/home\n
@@ -68,12 +68,15 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
 
-./mount_umount-chroot.sh $1 mount
 if [ "$version" == "5-i386" ] || [ "$version" == "6-i386" ] ; then
    sed -i 's/$basearch/i386/g' $CHROOT/etc/yum.repos.d/*.repo
 fi
 
-yum --nogpgcheck -c $CHROOT/tmp/yumcentos.conf --disablerepo=* --enablerepo=basecentoschroot --enablerepo=updatescentoschroot --installroot=$CHROOT -y update
+./mount_umount-chroot.sh $1 mount
+chroot $CHROOT rpm -ivh --nodeps /tmp/centos-release-*.rpm
+chroot $CHROOT yum -y install $paquetesadiocionales
+chroot $CHROOT yum -y update
+chroot $CHROOT yum clean all
 yum --nogpgcheck -c $CHROOT/tmp/yumcentos.conf --disablerepo=* --enablerepo=basecentoschroot --enablerepo=updatescentoschroot --installroot=$CHROOT clean all
 
 if [ "$version" == "5" ] || [ "$version" == "5-i386" ] ; then
