@@ -12,7 +12,7 @@
 
 source $(dirname $0)/chroot.conf
 
-if [ ! -f /usr/sbin/debootstrap ] ; then echo -e "Instale debootstrap para Centos. Necesario para continuar:\n rpm -ivh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm [Repositorio EPEL](Centos 6)\n rpm -ivh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm[Repositorio EPEL](Centos 7)\nyum install debootstrap\nyum install xz #<- Requerido para debian 8(jessie)"; fi
+if [ ! -f /usr/sbin/debootstrap ] ; then echo -e "\nInstale debootstrap para Centos, Debian, Ubuntu o Kali. Necesario para continuar\n   yum install debootstrap\nor\n   apt-get install debootstrap"; exit -1; fi
 
 echo " - - - - - - - - - - - - - - - - - -"
 echo -e "$0 creara una jaula dentro del directorio $ROOTJAIL/$1\n"

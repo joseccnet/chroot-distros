@@ -85,7 +85,7 @@ if [ "$2" == "umount" ] ; then
          exit -1
       fi
    done
-   fuser -k $CHROOT #Fuerza matar procesos dentro de la jaula.
+   fuser -k $CHROOT #Forza matar procesos dentro de la jaula.
 
 elif [ "$2" == "mount" ] ; then
    if [ ! -f $CHROOT/etc/mychroot.conf ] ; then echo "No existe archivo de configuracion $CHROOT/etc/mychroot.conf. Saliendo"; exit -1; fi

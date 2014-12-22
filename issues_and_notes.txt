@@ -19,3 +19,25 @@ For squeeze add this line:
 For wheezy add this line:
    echo 'deb http://http.debian.net/debian wheezy-backports main' >> /etc/apt/sources.list
    apt-get -t wheezy-backports install yum yum-utils
+
++ Debian 7.7, error python: "EOFError: compressed file ended before the logical end-of-stream was detected" al instalar una jaula con Fedora.
+
+   Ejemplo: root@ubuntu-vm:~/chroot-distros# ./build-chroot-Fedora.sh Fedora21 21
+
+   FIX:
+   El error es una mala validación de yum para debian 7.7. Solución: Actualizar a una versión más reciente de yum
+
+   For wheezy add this line(Instrucciones completas en http://backports.debian.org/Instructions/):
+      echo 'deb http://http.debian.net/debian wheezy-backports main' >> /etc/apt/sources.list
+      apt-get -t wheezy-backports install yum
+
++ Ubuntu 14.10, erro python: "pycurl.error: (43, 'CURLOPT_SSL_VERIFYHOST no longer supports 1 as value!')" al instalar una jaula con Fedora.
+
+   Ejemplo: root@ubuntu-vm:~/chroot-distros# ./build-chroot-Fedora.sh Fedora21 21
+
+   FIX:
+   En archivo /usr/lib/python2.7/dist-packages/urlgrabber/grabber.py línea 1193 
+   Cambiar
+    self.curl_obj.setopt(pycurl.SSL_VERIFYHOST, opts.ssl_verify_host)
+   Por el siguiente FIX
+    self.curl_obj.setopt(pycurl.SSL_VERIFYHOST, 0)

@@ -6,12 +6,12 @@ source $(dirname $0)/chroot.conf
 if [ "$1" != "I_AM_AGREE" ] ; then
    echo -e "\nPara continuar, Ejecute:"
    echo -e "   $0 I_AM_AGREE NombreDistro &\n"
-   echo -e "   Donde NombreDistro puede ser: Debian , Ubuntu , Centos, Fedora, OpenSuse o KaliLiinux\n\n"
+   echo -e "   Donde NombreDistro puede ser: Debian , Ubuntu , Centos, Fedora, OpenSuse o KaliLinux\n\n"
 
    echo -e "La ejecucion de este script intentara instalar todas las versiones de sistemas operativos en jaulas con 'chroot'.\n\nTenga en cuenta:"
    echo -e " + Se asume que usted entiende sobre administracion de sistemas operativos Linux, en particular de temas con 'chroot'"
    echo -e " + Revise la configuracion del archivo $(dirname $0)/chroot.conf"
-   echo -e " + Necesita cerca de 10GB de espacio libre en $ROOTJAIL"
+   echo -e " + Necesita cerca de 10GB de espacio libre en $ROOTJAIL para instalar todas las versiones de Linux soportadas."
    echo -e " + Despues de ejecutar este script, **NO** elimine los directorios dentro de $ROOTJAIL SIN desmontar los File Systems (ejecutar script mount_umount-chroot.sh)"
    echo -e " + Ignorar esta advertencia puede causar inestabilidad en el sistema o incluso BORRAR archivos del sistema(ejemplo /home)\n\n"
    exit -1
