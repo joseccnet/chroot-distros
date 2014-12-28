@@ -55,7 +55,7 @@ fi
 mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHROOT. El archivo $CHROOT/etc/mychroot.conf segun necesidades.\n\n#Filesystems a montar:
 \nFS:/proc\nFS:/dev\nFS:/dev/pts\nFS:/sys\nFS:/home\n
 \n\nConfiguracion inicial de Servicios a iniciar:
-\nService:/etc/init.d/cron\nService:/etc/init.d/rsyslog\n"
+\nService:/etc/init.d/cron\n#Service:/etc/init.d/rsyslog\n"
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
 
