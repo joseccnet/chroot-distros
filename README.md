@@ -1,7 +1,7 @@
 Chroot Distros
 ==============
 
-Instala de una forma profesional ambienes CHROOT con distribuciones Linux: Debian, Ubuntu, Centos, Fedora, OpenSuse o KaliLinux. Arquitecturas i386 y x86_64.
+Instala de una manera profesional ambienes CHROOT con distribuciones Linux: Debian, Ubuntu, Centos, Fedora, OpenSuse o KaliLinux. Arquitecturas i386 y x86_64.
 
 Autor: @joseccnet
 
