@@ -122,6 +122,7 @@ elif [ "$2" == "mount" ] ; then
 
    #Actualiza archivos importantes del sistema.
    cp -f /etc/resolv.conf /etc/hosts /etc/fstab $CHROOT/etc/
+   cp -f /etc/sysconfig/network $CHROOT/etc/sysconfig/network
    chroot $CHROOT mv /etc/localtime /etc/localtime.ori
    chroot $CHROOT ln -s $mylocaltime /etc/localtime
    #grep -v encfs /etc/mtab | grep -v "$1" | grep -v "$ROOTJAIL" > $CHROOT/etc/mtab
