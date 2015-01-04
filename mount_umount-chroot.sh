@@ -122,7 +122,7 @@ elif [ "$2" == "mount" ] ; then
 
    #Actualiza archivos importantes del sistema.
    cp -f /etc/resolv.conf /etc/hosts /etc/fstab $CHROOT/etc/
-   cp -f /etc/sysconfig/network $CHROOT/etc/sysconfig/network
+   if [ -d $CHROOT/etc/sysconfig ] ; then cp -f /etc/sysconfig/network $CHROOT/etc/sysconfig/network ; fi
    chroot $CHROOT mv /etc/localtime /etc/localtime.ori
    chroot $CHROOT ln -s $mylocaltime /etc/localtime
    #grep -v encfs /etc/mtab | grep -v "$1" | grep -v "$ROOTJAIL" > $CHROOT/etc/mtab
@@ -131,7 +131,7 @@ elif [ "$2" == "mount" ] ; then
    cp $CHROOT/etc/skel/.??* $CHROOT/root
 
    grep "if.*mychroot.conf.*PS1.*chroot" $CHROOT/root/.bashrc
-   if [ "$?" != "0" ] ; then echo "if [ -f /etc/mychroot.conf ] ; then PS1='\[\e[1;31m\][(chroot)\u@\h \W]\#\[\e[0m\] '; fi ; cd" >> $CHROOT/root/.bashrc; fi
+   if [ "$?" != "0" ] ; then echo "if [ -f /etc/mychroot.conf ] ; then PS1='\[\e[1;31m\][(chroot)\u@\h \W]#\[\e[0m\] '; fi ; cd" >> $CHROOT/root/.bashrc; fi
 
    echo -e "\nIniciando servicios ..."
    for i in $(grep ^"Service:" $CHROOT/etc/mychroot.conf | awk -F\: '{print $2}')
