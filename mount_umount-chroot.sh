@@ -130,6 +130,9 @@ elif [ "$2" == "mount" ] ; then
    mkdir -p $CHROOT/root
    cp $CHROOT/etc/skel/.??* $CHROOT/root
 
+   grep "if.*mychroot.conf.*PS1.*chroot" $CHROOT/root/.bashrc
+   if [ "$?" != "0" ] ; then echo "if [ -f /etc/mychroot.conf ] ; then PS1='\[\e[1;31m\][(chroot)\u@\h \W]\#\[\e[0m\] '; fi ; cd" >> $CHROOT/root/.bashrc; fi
+
    echo -e "\nIniciando servicios ..."
    for i in $(grep ^"Service:" $CHROOT/etc/mychroot.conf | awk -F\: '{print $2}')
    do
