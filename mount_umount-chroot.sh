@@ -125,7 +125,7 @@ elif [ "$2" == "mount" ] ; then
    if [ -d $CHROOT/etc/sysconfig ] ; then cp -f /etc/sysconfig/network $CHROOT/etc/sysconfig/network ; fi
    chroot $CHROOT mv /etc/localtime /etc/localtime.ori
    chroot $CHROOT ln -s $mylocaltime /etc/localtime
-   #grep -v encfs /etc/mtab | grep -v "$1" | grep -v "$ROOTJAIL" > $CHROOT/etc/mtab
+   if ! [ -f $CHROOT/etc/mtab ] ; then chroot $CHROOT ln -s /proc/mounts /etc/mtab; fi
 
    mkdir -p $CHROOT/root
    cp $CHROOT/etc/skel/.??* $CHROOT/root
