@@ -64,7 +64,7 @@ if [ "$2" == "umount" ] ; then
    for i in $(grep ^"Service:" $CHROOT/etc/mychroot.conf | awk -F\: '{print $2}')
    do
       echo " + $CHROOT$i ..."
-      if [ -d $CHROOT/etc/systemd ] ; then
+      if [ -d $CHROOT/etc/systemd ] && [ -f $CHROOT/bin/systemctl ] ; then
          fuser -vk $CHROOT
       else
          chroot $CHROOT $i stop
@@ -137,7 +137,7 @@ elif [ "$2" == "mount" ] ; then
    for i in $(grep ^"Service:" $CHROOT/etc/mychroot.conf | awk -F\: '{print $2}')
    do
       echo " + $CHROOT$i"
-      if [ -d $CHROOT/etc/systemd ] ; then
+      if [ -d $CHROOT/etc/systemd ] && [ -f $CHROOT/bin/systemctl ] ; then
          s=$(echo $i | awk -F\/ '{print $NF}')
          #Sistemas Linux con 'systemd' es necesario levantar 'manualmente' los servicios. Implementarlos aqui:
          if [[ $s =~ .*cron.* ]] ; then echo 'c=$(which crond) || c=$(which cron); eval $c' > $CHROOT/opt/cron.sh; chmod 700 $CHROOT/opt/cron.sh; chroot $CHROOT /opt/cron.sh; rm -f $CHROOT/opt/cron.sh; echo " $s [done]"; fi
