@@ -72,7 +72,7 @@ if [ "$2" == "umount" ] ; then
    done
 
    echo -e "\nDesmontando FS ..."
-   for i in $(mount | grep "$CHROOT" | awk '{print $3}' | sort -r)
+   for i in $(mount | grep "$CHROOT/" | awk '{print $3}' | sort -r)
    do
       echo " + Desmontando $i ..."
       umount $i
