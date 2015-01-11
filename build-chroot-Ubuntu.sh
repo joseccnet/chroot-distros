@@ -130,6 +130,9 @@ opt="
 #   cp /usr/sbin/chroot /usr/sbin/chrootuser (como root una sola vez)
 #   setcap cap_sys_chroot+ep /usr/sbin/chrootUser (como root una sola vez)
 #   /usr/sbin/chrootUser $CHROOT (como NO root, ya puede hacer uso de la jaula)
+#
+#Nota: Antes de utilizar la jaula, considere agregar los repositorios necesarios en /etc/apt/sources.list,
+#      puede generarlos en este sitio: http://repogen.simplylinux.ch/index.php, apt-get update, apt-get install ...
 "
 echo -e "\n$opt\n"
 
