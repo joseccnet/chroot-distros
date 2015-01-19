@@ -21,7 +21,7 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 if [ "$1" == "" ]; then
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [jessie|wheezy|squeeze [amd64|i386]]\n"
+echo -e "$0 NombreJaula [sid|jessie|wheezy|squeeze [amd64|i386]]\n"
 exit -1
 fi
 
@@ -55,6 +55,12 @@ elif [ "$version" == "jessie" ] ; then
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://mirrors.kernel.org/debian
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "sid" ] ; then
+   #Default:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sid $CHROOT http://http.debian.net/debian
+   #Otras opciones de descarga:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sid $CHROOT http://mirrors.kernel.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
    #Default:
