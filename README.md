@@ -10,22 +10,23 @@ Descripción:
  Para instalar rápida y fácilmente un ambiente 'chroot' sólo necesitas:
 
 + Tener instalado un sistema operativo Linux arquitectura x86_64(Probado en Centos 6.6, Centos 7, Debian 7.7, Ubuntu 14.10, Kali Linux 1.0.9a).
-+ En Centos 6, instalar el repositorio EPEL: rpm -ivh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-+ En Centos 7, instalar el repositorio EPEL: rpm -ivh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
-+ En Centos 6 o 7, instalar: yum install git pyliblzma debootstrap (debootstrap disponible en el repositorio EPEL)
-+ En Debian, Ubuntu y Kali Linux, instalar las dependencias: apt-get install yum debootstrap python-lzma psmisc git
-+ Descargar/clonar este proyecto con git: git clone https://github.com/joseccnet/chroot-distros.git
-+ cd chroot-distros ; chmod 700 *.sh
++ En Centos 6, instalar el repositorio EPEL: ``rpm -ivh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm``
++ En Centos 7, instalar el repositorio EPEL: ``rpm -ivh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm``
++ En Centos 6 o 7, instalar: ``yum install git pyliblzma debootstrap`` (debootstrap disponible en el repositorio EPEL)
++ En Debian, Ubuntu y Kali Linux, instalar las dependencias: ``apt-get install yum debootstrap python-lzma psmisc git``
++ Descargar/clonar este proyecto con git: ``git clone https://github.com/joseccnet/chroot-distros.git``
++ ``cd chroot-distros ; chmod 700 *.sh``
 
 Estas listo para instalar ambientes 'chroot' (Debian, Ubuntu, Centos, Fedora, OpenSuse o KaliLinux):
 
 + En el archivo 'chroot.conf', revise y configure la variable de ambiente ROOTJAIL (default: ROOTJAIL=/opt/jaulas)
 + Revise y ejecute con el usuario root el script 'install-all-versions.sh'(Este archivo tiene ejemplos de cómo instalar las diferentes versiones de sistemas operativos), observará algo como esto:
 
-\# ./install-all-versions.sh
+`` ./install-all-versions.sh``
 
 Para continuar, Ejecute:
-   ./install-all-versions.sh I_AM_AGREE NombreDistro &
+
+`` ./install-all-versions.sh I_AM_AGREE NombreDistro &``
 
    Donde NombreDistro puede ser: Debian , Ubuntu , Centos, Fedora, OpenSuse o KaliLinux
 
