@@ -103,7 +103,7 @@ echo "deb http://archive.ubuntu.com/ubuntu $version-updates main universe" >> $C
 
 ./mount_umount-chroot.sh $1 mount
 
-chroot $CHROOT /bin/bash -c "apt-get update && apt-get upgrade && apt-get clean all"
+chroot $CHROOT /bin/bash -c "apt-get update && apt-get -y upgrade && apt-get clean all"
 
 echo -e "\n- - - - RESUMEN- - - -\n"
 echo -e "Dispositivos montados:"
