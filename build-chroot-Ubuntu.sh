@@ -98,8 +98,8 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 \nService:/etc/init.d/cron\n#Service:/etc/init.d/rsyslog\n"
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
-echo "deb http://archive.ubuntu.com/ubuntu $version main universe\n" > $CHROOT/etc/apt/sources.list
-echo "deb http://archive.ubuntu.com/ubuntu $version-updates main universe\n" >> $CHROOT/etc/apt/sources.list
+echo "deb http://archive.ubuntu.com/ubuntu $version main universe" > $CHROOT/etc/apt/sources.list
+echo "deb http://archive.ubuntu.com/ubuntu $version-updates main universe" >> $CHROOT/etc/apt/sources.list
 
 ./mount_umount-chroot.sh $1 mount
 
