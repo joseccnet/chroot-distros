@@ -56,39 +56,39 @@ fi
 
 if [ "$version" == "vivid" ] ; then
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb vivid $CHROOT http://archive.ubuntu.com/ubuntu
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb vivid $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb vivid $CHROOT http://mirrors.kernel.org/ubuntu
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb vivid $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "utopic" ] ; then
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb utopic $CHROOT http://archive.ubuntu.com/ubuntu
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb utopic $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb utopic $CHROOT http://mirrors.kernel.org/ubuntu
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb utopic $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "trusty" ] ; then
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb trusty $CHROOT http://archive.ubuntu.com/ubuntu
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb trusty $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb trusty $CHROOT http://mirrors.kernel.org/ubuntu
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb trusty $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "precise" ] ; then
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb precise $CHROOT http://archive.ubuntu.com/ubuntu
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb precise $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb precise $CHROOT http://mirrors.kernel.org/ubuntu
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb precise $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "lucid" ] ; then
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb lucid $CHROOT http://archive.ubuntu.com/ubuntu
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb lucid $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb lucid $CHROOT http://mirrors.kernel.org/ubuntu
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb lucid $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb vivid $CHROOT http://archive.ubuntu.com/ubuntu
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb vivid $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb vivid $CHROOT http://mirrors.kernel.org/ubuntu
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb vivid $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
@@ -98,6 +98,8 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 \nService:/etc/init.d/cron\n#Service:/etc/init.d/rsyslog\n"
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
+echo "deb http://archive.ubuntu.com/ubuntu $version main universe\n" > $CHROOT/etc/apt/sources.list
+echo "deb http://archive.ubuntu.com/ubuntu $version-updates main universe\n" >> $CHROOT/etc/apt/sources.list
 
 ./mount_umount-chroot.sh $1 mount
 
