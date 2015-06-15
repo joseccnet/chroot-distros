@@ -42,31 +42,31 @@ if [ "$version" == "wheezy" ] ; then
    #Default:
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://mirrors.kernel.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "squeeze" ] ; then
    #Default:
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb squeeze $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb squeeze $CHROOT http://mirrors.kernel.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb squeeze $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "jessie" ] ; then
    #Default:
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://mirrors.kernel.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "sid" ] ; then
    #Default:
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sid $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sid $CHROOT http://mirrors.kernel.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sid $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
    #Default:
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://mirrors.kernel.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
@@ -76,13 +76,20 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 \nService:/etc/init.d/cron\n#Service:/etc/init.d/rsyslog\n"
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
+if [ "$version" != "sid" ] ; then #SID no tiene updates por ser de desarrollo.
+   echo "deb http://httpredir.debian.org/debian/ $version main" > $CHROOT/etc/apt/sources.list
+   echo "deb http://httpredir.debian.org/debian/ $version-updates main" >> $CHROOT/etc/apt/sources.list
+   echo "deb http://security.debian.org/ $version/updates main" >> $CHROOT/etc/apt/sources.list
+fi
 
 ./mount_umount-chroot.sh $1 mount
 
-chroot $CHROOT /usr/bin/apt-get update
-chroot $CHROOT /usr/bin/apt-get -y install deborphan
-chroot $CHROOT /usr/bin/deborphan -a
+chroot $CHROOT /bin/bash -c "apt-get update && apt-get -y install deborphan && deborphan -a"
+#chroot $CHROOT /usr/bin/apt-get update
+#chroot $CHROOT /usr/bin/apt-get -y install deborphan
+#chroot $CHROOT /usr/bin/deborphan -a
 for i in $(chroot $CHROOT /usr/bin/deborphan -a | awk '{print $2}' | egrep -v "exclude_pakage_name1|exclude_pakage_name2|deborphan|wget|openssh-|rsyslog"); do chroot $CHROOT /usr/bin/apt-get -y remove $i; done
+chroot $CHROOT /bin/bash -c "apt-get -y upgrade && apt-get clean all"
 
 echo -e "\n- - - - RESUMEN- - - -\n"
 echo -e "Dispositivos montados:"
