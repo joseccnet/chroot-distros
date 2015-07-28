@@ -2,7 +2,7 @@
 #
 # Build a chroot with a CentOS base install.
 # Author: josecc@gmail.com
-source $(dirname $0)/chroot.conf
+source $(dirname $0)/chroot.conf $0 $@
 
 if [ ! -f /usr/bin/yum ] ; then echo -e "Favor de instalar Yum:\n   apt-get install yum\n"; exit -1; fi
 if [ ! -f /usr/sbin/debootstrap ] ; then echo -e "\nInstale debootstrap para Centos, Debian, Ubuntu o Kali. Necesario para continuar\n   yum install debootstrap\nor\n   apt-get install debootstrap"; exit -1; fi
@@ -50,10 +50,14 @@ elif [ "$version" == "5-i386" ] ; then
    wget -c $c5rpm1_i386
    wget -c $c5rpm2_i386
 else
+   $0 $1 7
+   exit 0
+   version=7 #Centos 7 as default
    yumcentosconf=$CHROOT/tmp/yumcentos.conf
-   yum -y install yum-utils
-   yumdownloader centos-release
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+   wget -c $c7rpm1
+   #yum -y install yum-utils
+   #yumdownloader centos-release
+   #if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 mkdir -p $CHROOT/tmp/ ; cp centos-release-*.rpm $CHROOT/tmp/
 rpm -ivh --root=$CHROOT --nodeps $CHROOT/tmp/centos-release-*.rpm

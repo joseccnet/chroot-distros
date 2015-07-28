@@ -63,10 +63,12 @@ elif [ "$2" == "OpenSuse" ] ; then
    ./build-chroot-OpenSuse.sh Opensuse12.3-i586 12.3 i586 >> /tmp/install-all-versions.$2.log 2>&1
    ./build-chroot-OpenSuse.sh Opensuse11.4-i586 11.4 i586 >> /tmp/install-all-versions.$2.log 2>&1
 elif [ "$2" == "Fedora" ] ; then
+   ./build-chroot-Fedora.sh Fedora22-x86_64 22 >> /tmp/install-all-versions.$2.log 2>&1
    ./build-chroot-Fedora.sh Fedora21-x86_64 21 >> /tmp/install-all-versions.$2.log 2>&1
    ./build-chroot-Fedora.sh Fedora20-x86_64 20 >> /tmp/install-all-versions.$2.log 2>&1
    ./build-chroot-Fedora.sh Fedora19-x86_64 19 >> /tmp/install-all-versions.$2.log 2>&1
 
+   ./build-chroot-Fedora.sh Fedora22-i386 22-i386 >> /tmp/install-all-versions.$2.log 2>&1
    ./build-chroot-Fedora.sh Fedora21-i386 21-i386 >> /tmp/install-all-versions.$2.log 2>&1
    ./build-chroot-Fedora.sh Fedora20-i386 20-i386 >> /tmp/install-all-versions.$2.log 2>&1
    ./build-chroot-Fedora.sh Fedora19-i386 19-i386 >> /tmp/install-all-versions.$2.log 2>&1

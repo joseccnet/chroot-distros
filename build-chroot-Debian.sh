@@ -3,7 +3,7 @@
 # Build a chroot with a Debian base install.
 # Author: josecc@gmail.com
 #
-#8.0? jessie - No release date has been set(Dic 2014)
+#8.0 jessie - 2015-04-25: Initial release: 8.0
 #7.0 wheezy May 4th 2013
 #6.0 squeeze February 6th 2011
 #Diciembre 2014: unstable(sid), testing(jessie), stable(wheezy)
@@ -34,7 +34,7 @@ version=$2
 arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
-if [ "$version" == "" ] ; then version="wheezy"; fi
+if [ "$version" == "" ] ; then version="jessie"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
@@ -64,9 +64,9 @@ elif [ "$version" == "sid" ] ; then
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://http.debian.net/debian
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://httpredir.debian.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
