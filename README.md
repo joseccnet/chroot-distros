@@ -9,7 +9,7 @@ Descripción:
 
  Para instalar rápida y fácilmente un ambiente 'chroot' sólo necesitas:
 
-+ Tener instalado un sistema operativo Linux arquitectura x86_64(Probado en Centos 6.6, Centos 7, Debian 7.7, Ubuntu 14.10, Kali Linux 1.0.9a).
++ Tener instalado un sistema operativo Linux arquitectura x86_64(Probado en Centos 6.6, Centos 7, Debian 7.7, Debian 8.0, Ubuntu 14.10, Kali Linux 1.0.x y 2.0).
 + En Centos 6, instalar el repositorio EPEL: ``rpm -ivh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm``
 + En Centos 7, instalar el repositorio EPEL: ``rpm -ivh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm``
 + En Centos 6 o 7, instalar: ``yum install git pyliblzma debootstrap`` (debootstrap disponible en el repositorio EPEL)
