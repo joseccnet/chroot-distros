@@ -40,6 +40,7 @@ version=$2
 arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
+if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb,libc6-i386"; fi
 if [ "$version" == "" ] ; then version="vivid"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
