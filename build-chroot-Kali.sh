@@ -17,7 +17,7 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 if [ "$1" == "" ]; then
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [kali [amd64|i386]]\n"
+echo -e "$0 NombreJaula [kali|sana [amd64|i386]]\n"
 exit -1
 fi
 
@@ -30,7 +30,8 @@ version=$2
 arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
-if [ "$version" == "" ] ; then version="kali"; fi
+if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb,libc6-i386"; fi
+if [ "$version" == "" ] ; then version="sana"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
@@ -38,6 +39,9 @@ echo -e "VERSION: $version \t ARCH: $arch"
 if [ -d /usr/share/debootstrap/scripts ] ; then
    if [ ! -f /usr/share/debootstrap/scripts/kali ] ; then
       ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/kali
+   fi
+   if [ ! -f /usr/share/debootstrap/scripts/sana ] ; then
+      ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/sana
    fi
 else
    echo -e "Version de debootstrap no soporta instalar Kali Linux. Salir.\n"
@@ -47,8 +51,11 @@ fi
 if [ "$version" == "kali" ] ; then
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb kali $CHROOT http://http.kali.org
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "sana" ] ; then
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sana $CHROOT http://http.kali.org
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb kali $CHROOT http://http.kali.org
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sana $CHROOT http://http.kali.org
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
@@ -61,10 +68,15 @@ echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychr
 
 ./mount_umount-chroot.sh $1 mount
 
+echo "deb http://http.kali.org $version main non-free contrib" > $CHROOT/etc/apt/sources.list
+echo "deb http://security.kali.org $version/updates main non-free contrib" >> $CHROOT/etc/apt/sources.list
+chroot $CHROOT /usr/bin/apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED444FF07D8D0BF6
 chroot $CHROOT /usr/bin/apt-get update
 chroot $CHROOT /usr/bin/apt-get -y install deborphan
 chroot $CHROOT /usr/bin/deborphan -a
 for i in $(chroot $CHROOT /usr/bin/deborphan -a | awk '{print $2}' | egrep -v "exclude_pakage_name1|exclude_pakage_name2|deborphan|wget|openssh-|rsyslog"); do chroot $CHROOT /usr/bin/apt-get -y remove $i; done
+chroot $CHROOT /usr/bin/apt-get -y upgrade
+chroot $CHROOT /usr/bin/apt-get clean all
 
 echo -e "\n- - - - RESUMEN- - - -\n"
 echo -e "Dispositivos montados:"
