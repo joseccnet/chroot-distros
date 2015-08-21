@@ -102,10 +102,6 @@ echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychr
 echo "deb http://archive.ubuntu.com/ubuntu $version main universe" > $CHROOT/etc/apt/sources.list
 echo "deb http://archive.ubuntu.com/ubuntu $version-updates main universe" >> $CHROOT/etc/apt/sources.list
 
-if [ -f $CHROOT/etc/bash.bashrc ] ; then
-   echo "export LC_ALL=$LC_ALL" >> $CHROOT/etc/bash.bashrc
-fi
-
 ./mount_umount-chroot.sh $1 mount
 
 chroot $CHROOT /bin/bash -c "apt-get update && apt-get -y upgrade && apt-get clean all"
