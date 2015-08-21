@@ -83,6 +83,10 @@ if [ "$version" != "sid" ] ; then #SID no tiene updates por ser de desarrollo.
    echo "deb http://security.debian.org/ $version/updates main" >> $CHROOT/etc/apt/sources.list
 fi
 
+if [ -f $CHROOT/etc/bash.bashrc ] ; then
+   echo "export LC_ALL=$LC_ALL" >> $CHROOT/etc/bash.bashrc
+fi
+
 ./mount_umount-chroot.sh $1 mount
 
 chroot $CHROOT /bin/bash -c "apt-get update && apt-get -y install deborphan && deborphan -a"

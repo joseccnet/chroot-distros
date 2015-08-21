@@ -66,6 +66,10 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
 
+if [ -f $CHROOT/etc/bash.bashrc ] ; then
+   echo "export LC_ALL=$LC_ALL" >> $CHROOT/etc/bash.bashrc
+fi
+
 ./mount_umount-chroot.sh $1 mount
 
 echo "deb http://http.kali.org $version main non-free contrib" > $CHROOT/etc/apt/sources.list
