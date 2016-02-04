@@ -146,6 +146,12 @@ elif [ "$2" == "mount" ] ; then
          chroot $CHROOT $i start
       fi
    done
+   if [ -f $CHROOT/etc/init.d/myinit.d ] ; then
+      echo "$CHROOT/etc/init.d/myinit.d encontrado!, ejecuntando ..."
+      chmod 750 $CHROOT/etc/init.d/myinit.d
+      chroot $CHROOT /etc/init.d/myinit.d
+      echo "   myinit.d [Done.]"
+   fi
 
    echo "Done."
 else
