@@ -3,6 +3,8 @@
 # Build a chroot with a Ubuntu base install.
 # Author: josecc@gmail.com
 #
+#Xenial - 16.04 LTS
+#Wily - 15.10
 #Vivid - 15.04
 #Utopic - 14.10
 #Trusty - 14.04 LTS
@@ -20,14 +22,16 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
-echo -e "#Vivid - 15.04
+echo -e "#Xenial - 16.04 LTS
+#Wily - 15.10
+#Vivid - 15.04
 #Utopic - 14.10
 #Trusty - 14.04 LTS
 #Precise - 12.04 LTS
 #Lucid - 10.04 LTS
 "
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
+echo -e "$0 NombreJaula [xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
 exit -1
 fi
 
@@ -41,7 +45,7 @@ arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
 if [ "$arch" == "amd64" ] ; then paquetesadiocionalesUbuntu="$paquetesadiocionalesUbuntu,libc6-i386"; fi
-if [ "$version" == "" ] ; then version="vivid"; fi
+if [ "$version" == "" ] ; then version="xenial"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
@@ -55,7 +59,19 @@ else
    exit -1
 fi
 
-if [ "$version" == "vivid" ] ; then
+if [ "$version" == "xenial" ] ; then
+   #Default:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://archive.ubuntu.com/ubuntu
+   #Otras opciones de descarga:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://mirrors.kernel.org/ubuntu
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "wily" ] ; then
+   #Default:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu wily $CHROOT http://archive.ubuntu.com/ubuntu
+   #Otras opciones de descarga:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu wily $CHROOT http://mirrors.kernel.org/ubuntu
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "vivid" ] ; then
    #Default:
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu vivid $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
@@ -87,9 +103,9 @@ elif [ "$version" == "lucid" ] ; then
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
    #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu vivid $CHROOT http://archive.ubuntu.com/ubuntu
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu vivid $CHROOT http://mirrors.kernel.org/ubuntu
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
@@ -99,8 +115,10 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 \nService:/etc/init.d/cron\n#Service:/etc/init.d/rsyslog\n"
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
-echo "deb http://archive.ubuntu.com/ubuntu $version main universe" > $CHROOT/etc/apt/sources.list
-echo "deb http://archive.ubuntu.com/ubuntu $version-updates main universe" >> $CHROOT/etc/apt/sources.list
+#Repositorios Ubuntu Linux: https://help.ubuntu.com/community/Repositories
+echo "deb http://archive.ubuntu.com/ubuntu $version main restricted universe multiverse" > $CHROOT/etc/apt/sources.list
+echo "deb http://archive.ubuntu.com/ubuntu $version-security main restricted universe multiverse" >> $CHROOT/etc/apt/sources.list
+echo "deb http://archive.ubuntu.com/ubuntu $version-updates main restricted universe multiverse" >> $CHROOT/etc/apt/sources.list
 
 ./mount_umount-chroot.sh $1 mount
 

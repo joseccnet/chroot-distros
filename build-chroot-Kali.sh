@@ -17,7 +17,7 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 if [ "$1" == "" ]; then
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [kali|sana [amd64|i386]]\n"
+echo -e "$0 NombreJaula [kali-rolling|sana|kali-current [amd64|i386]]\n"
 exit -1
 fi
 
@@ -31,31 +31,37 @@ arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
 if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb,libc6-i386"; fi
-if [ "$version" == "" ] ; then version="sana"; fi
+if [ "$version" == "" ] ; then version="kali-rolling"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
 #Hacer que debootstrap me permita instalar KALI LINUX:
 if [ -d /usr/share/debootstrap/scripts ] ; then
-   if [ ! -f /usr/share/debootstrap/scripts/kali ] ; then
-      ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/kali
+   if [ ! -f /usr/share/debootstrap/scripts/kali-current ] ; then
+      ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/kali-current
    fi
    if [ ! -f /usr/share/debootstrap/scripts/sana ] ; then
       ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/sana
+   fi
+   if [ ! -f /usr/share/debootstrap/scripts/kali-rolling ] ; then
+      ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/kali-rolling
    fi
 else
    echo -e "Version de debootstrap no soporta instalar Kali Linux. Salir.\n"
    exit -1
 fi
 
-if [ "$version" == "kali" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb kali $CHROOT http://http.kali.org
+if [ "$version" == "kali-rolling" ] ; then
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb kali-rolling $CHROOT http://http.kali.org
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "kali-current" ] ; then
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb kali-current $CHROOT http://http.kali.org
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "sana" ] ; then
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sana $CHROOT http://http.kali.org
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sana $CHROOT http://http.kali.org
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb kali-rolling $CHROOT http://http.kali.org
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
@@ -69,7 +75,9 @@ echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychr
 ./mount_umount-chroot.sh $1 mount
 
 echo "deb http://http.kali.org $version main non-free contrib" > $CHROOT/etc/apt/sources.list
-echo "deb http://security.kali.org $version/updates main non-free contrib" >> $CHROOT/etc/apt/sources.list
+if [ "$version" != "kali-rolling" ] ; then # kali-rolling NO tiene repositorio 'updates'
+   echo "deb http://security.kali.org $version/updates main non-free contrib" >> $CHROOT/etc/apt/sources.list
+fi
 chroot $CHROOT /usr/bin/apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED444FF07D8D0BF6
 chroot $CHROOT /usr/bin/apt-get update
 chroot $CHROOT /usr/bin/apt-get -y install deborphan
