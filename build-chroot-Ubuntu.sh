@@ -3,6 +3,8 @@
 # Build a chroot with a Ubuntu base install.
 # Author: josecc@gmail.com
 #
+#Zesty - 17.04
+#Yakkety - 16.10
 #Xenial - 16.04 LTS
 #Wily - 15.10
 #Vivid - 15.04
@@ -22,7 +24,9 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
-echo -e "#Xenial - 16.04 LTS
+echo -e "#Zesty - 17.04
+#Yakkety - 16.10
+#Xenial - 16.04 LTS
 #Wily - 15.10
 #Vivid - 15.04
 #Utopic - 14.10
@@ -31,7 +35,7 @@ echo -e "#Xenial - 16.04 LTS
 #Lucid - 10.04 LTS
 "
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
+echo -e "$0 NombreJaula [zesty|yakkety|xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
 exit -1
 fi
 
@@ -45,7 +49,7 @@ arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
 if [ "$arch" == "amd64" ] ; then paquetesadiocionalesUbuntu="$paquetesadiocionalesUbuntu,libc6-i386"; fi
-if [ "$version" == "" ] ; then version="xenial"; fi
+if [ "$version" == "" ] ; then version="xenial"; fi #Ultima version LTS
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
@@ -59,7 +63,19 @@ else
    exit -1
 fi
 
-if [ "$version" == "xenial" ] ; then
+if [ "$version" == "zesty" ] ; then
+   #Default:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://archive.ubuntu.com/ubuntu
+   #Otras opciones de descarga:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://mirrors.kernel.org/ubuntu
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "yakkety" ] ; then
+   #Default:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu yakkety $CHROOT http://archive.ubuntu.com/ubuntu
+   #Otras opciones de descarga:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu yakkety $CHROOT http://mirrors.kernel.org/ubuntu
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "xenial" ] ; then
    #Default:
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
