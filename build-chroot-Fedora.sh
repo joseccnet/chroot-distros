@@ -15,6 +15,7 @@ if ! [ -f /usr/lib*/python2.*/*-packages/liblzma.py -o -f /usr/share/pyshared/li
 
 if [ "$1" == "" ]; then
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
+echo -e "$0 NombreJaula [25|24|23|22|21|20|19|25-i386|24-i386|23-i386|22-i386|21-i386|20-i386|19-i386]\n"
 exit -1
 fi
 
