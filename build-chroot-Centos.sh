@@ -64,7 +64,17 @@ rpm -ivh --root=$CHROOT --nodeps $CHROOT/tmp/centos-release-*.rpm
 
 cp $(dirname $0)/centos/yumcentos.conf $CHROOT/tmp/
 cp $(dirname $0)/centos/yumcentosi386.conf $CHROOT/tmp/
-yum --nogpgcheck -c $yumcentosconf --disablerepo=* --enablerepo=basecentoschroot --enablerepo=updatescentoschroot --installroot=$CHROOT install -y yum yum-utils
+if [ "$version" == "5" ] || [ "$version" == "5-i386" ] ; then
+   rm -f $CHROOT/etc/yum.repos.d/*.repo
+   cp -f $(dirname $0)/centos/*.repo $CHROOT/etc/yum.repos.d/
+   if [ "$version" == "5-i386" ] || [ "$version" == "6-i386" ] ; then
+      sed -i 's/$basearch/i386/g' $CHROOT/etc/yum.repos.d/*.repo
+   fi
+   echo "" > $CHROOT/etc/yum/pluginconf.d/fastestmirror.conf
+   yum --nogpgcheck -c $yumcentosconf --disablerepo=* --enablerepo=C5.11-base --installroot=$CHROOT install -y yum yum-utils
+else
+   yum --nogpgcheck -c $yumcentosconf --disablerepo=* --enablerepo=basecentoschroot --enablerepo=updatescentoschroot --installroot=$CHROOT install -y yum yum-utils
+fi
 
 mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHROOT. El archivo $CHROOT/etc/mychroot.conf segun necesidades.\n\n#Filesystems a montar:
 \nFS:/proc\nFS:/dev\nFS:/dev/pts\nFS:/sys\nFS:/home\n
@@ -73,16 +83,31 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
 
-if [ "$version" == "5-i386" ] || [ "$version" == "6-i386" ] ; then
-   sed -i 's/$basearch/i386/g' $CHROOT/etc/yum.repos.d/*.repo
-fi
+#if [ "$version" == "5-i386" ] || [ "$version" == "6-i386" ] ; then
+#   sed -i 's/$basearch/i386/g' $CHROOT/etc/yum.repos.d/*.repo
+#fi
 
 ./mount_umount-chroot.sh $1 mount
 chroot $CHROOT rpm -ivh --nodeps /tmp/centos-release-*.rpm
+if [ "$version" == "5" ] || [ "$version" == "5-i386" ] ; then
+   rm -f $CHROOT/etc/yum.repos.d/*.repo
+   cp -f $(dirname $0)/centos/*.repo $CHROOT/etc/yum.repos.d/
+   if [ "$version" == "5-i386" ] || [ "$version" == "6-i386" ] ; then
+      sed -i 's/$basearch/i386/g' $CHROOT/etc/yum.repos.d/*.repo
+   fi
+   echo "" > $CHROOT/etc/yum/pluginconf.d/fastestmirror.conf
+fi
+if [ "$version" == "5-i386" ] || [ "$version" == "6-i386" ] ; then
+   sed -i 's/$basearch/i386/g' $CHROOT/etc/yum.repos.d/*.repo
+fi
 chroot $CHROOT yum -y install $paquetesadiocionales
 chroot $CHROOT yum -y update
 chroot $CHROOT yum clean all
-yum --nogpgcheck -c $CHROOT/tmp/yumcentos.conf --disablerepo=* --enablerepo=basecentoschroot --enablerepo=updatescentoschroot --installroot=$CHROOT clean all
+if [ "$version" == "5" ] || [ "$version" == "5-i386" ] ; then
+   yum --nogpgcheck -c $CHROOT/tmp/yumcentos.conf --disablerepo=* --enablerepo=C5.11-base --installroot=$CHROOT clean all
+else
+   yum --nogpgcheck -c $CHROOT/tmp/yumcentos.conf --disablerepo=* --enablerepo=basecentoschroot --enablerepo=updatescentoschroot --installroot=$CHROOT clean all
+fi
 ./mount_umount-chroot.sh $1 umount > /dev/null 2>&1 #Notifica errores "normales"
 ./mount_umount-chroot.sh $1 mount
 
