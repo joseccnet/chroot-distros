@@ -30,7 +30,7 @@ version=$2
 arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
-if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb,libc6-i386"; fi
+if [ "$arch" == "amd64" ] ; then paquetesadiocionalesKali="$paquetesadiocionalesKali,libc6-i386"; fi
 if [ "$version" == "" ] ; then version="kali-rolling"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
@@ -52,16 +52,16 @@ else
 fi
 
 if [ "$version" == "kali-rolling" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb kali-rolling $CHROOT http://http.kali.org
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesKali kali-rolling $CHROOT http://http.kali.org
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "kali-current" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb kali-current $CHROOT http://http.kali.org
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesKali kali-current $CHROOT http://http.kali.org
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "sana" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sana $CHROOT http://http.kali.org
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesKali sana $CHROOT http://http.kali.org
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb kali-rolling $CHROOT http://http.kali.org
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesKali kali-rolling $CHROOT http://http.kali.org
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 

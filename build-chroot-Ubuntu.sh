@@ -3,6 +3,7 @@
 # Build a chroot with a Ubuntu base install.
 # Author: josecc@gmail.com
 #
+#Artful Aardvark - 17.10
 #Zesty - 17.04
 #Yakkety - 16.10
 #Xenial - 16.04 LTS
@@ -24,7 +25,8 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
-echo -e "#Zesty - 17.04
+echo -e "#Artful Aardvark - 17.10
+#Zesty - 17.04
 #Yakkety - 16.10
 #Xenial - 16.04 LTS
 #Wily - 15.10
@@ -35,7 +37,7 @@ echo -e "#Zesty - 17.04
 #Lucid - 10.04 LTS
 "
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [zesty|yakkety|xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
+echo -e "$0 NombreJaula [artful|zesty|yakkety|xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
 exit -1
 fi
 
@@ -63,7 +65,13 @@ else
    exit -1
 fi
 
-if [ "$version" == "zesty" ] ; then
+if [ "$version" == "artful" ] ; then
+   #Default:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu artful $CHROOT http://archive.ubuntu.com/ubuntu
+   #Otras opciones de descarga:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu artful $CHROOT http://mirrors.kernel.org/ubuntu
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "zesty" ] ; then
    #Default:
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
@@ -119,9 +127,9 @@ elif [ "$version" == "lucid" ] ; then
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
    #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://archive.ubuntu.com/ubuntu
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://archive.ubuntu.com/ubuntu
    #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://mirrors.kernel.org/ubuntu
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
