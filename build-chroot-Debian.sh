@@ -3,6 +3,7 @@
 # Build a chroot with a Debian base install.
 # Author: josecc@gmail.com
 #
+#9.0 stretch
 #8.0 jessie - 2015-04-25: Initial release: 8.0
 #7.0 wheezy May 4th 2013
 #6.0 squeeze February 6th 2011
@@ -21,7 +22,7 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 if [ "$1" == "" ]; then
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [sid|jessie|wheezy|squeeze [amd64|i386]]\n"
+echo -e "$0 NombreJaula [sid|stretch|jessie|wheezy|squeeze [amd64|i386]]\n"
 exit -1
 fi
 
@@ -35,11 +36,18 @@ arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
 if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb,libc6-i386"; fi
-if [ "$version" == "" ] ; then version="jessie"; fi
+if [ "$version" == "" ] ; then version="stretch"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
-if [ "$version" == "wheezy" ] ; then
+if [ "$version" == "stretch" ] ; then
+   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb9,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb9; fi
+   #Default:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://http.debian.net/debian
+   #Otras opciones de descarga:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://httpredir.debian.org/debian
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "wheezy" ] ; then
    #Default:
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
@@ -64,10 +72,11 @@ elif [ "$version" == "sid" ] ; then
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sid $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
+   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb9,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb9; fi #For Debian 9 stretch
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://http.debian.net/debian
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://httpredir.debian.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
