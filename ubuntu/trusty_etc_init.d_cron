@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ "$1" == "start" ] ; then
+   if [ ! -f /var/run/crond.pid ] ; then
+      /usr/sbin/cron start && echo "Start OK" && exit 0
+   else
+      echo "cron running with PID $(cat /var/run/crond.pid)?. First try '/etc/init.d/cron stop' or remove /var/run/crond.pid"
+   fi
+elif [ "$1" == "stop" ] ; then
+   if [ -f /var/run/crond.pid ] ; then
+      kill -9 $(cat /var/run/crond.pid) && rm -f /var/run/crond.pid && echo "Stop OK" && exit 0 || rm -f /var/run/crond.pid
+   else
+      echo "No PID file /var/run/crond.pid found. No running?"
+   fi
+elif [ "$1" == "restart" ] ; then
+   /etc/init.d/cron stop && /etc/init.d/cron start && echo "Restart OK" && exit 0
+elif [ "$1" == "status" ] ; then
+   if [ -f /var/run/crond.pid ] ; then
+      echo "Runing PID: $(cat /var/run/crond.pid)"
+   else
+      echo "No PID file /var/run/crond.pid found. No running?"
+   fi
+fi

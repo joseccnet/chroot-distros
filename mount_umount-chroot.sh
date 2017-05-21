@@ -104,7 +104,7 @@ elif [ "$2" == "mount" ] ; then
    {
       export UGIDLIMIT=500 # UID y GID >= 500 para Centos/RedHat
       if [ "$1" == "/etc/passwd" ] || [ "$1" == "/etc/group" ] ; then awk -v LIMIT=$UGIDLIMIT -F: '($3>=LIMIT) && ($3!=65534)' $1 > /tmp/fileto.mig; fi
-      if [ "$1" == "/etc/shadow" ] || [ "$1" == "/etc/gshadow" ] ; then awk -v LIMIT=$UGIDLIMIT -F: '($3>=LIMIT) && ($3!=65534) {print $1}' $CHROOT/etc/passwd | tee - |egrep -f - $1 > /tmp/fileto.mig; fi
+      if [ "$1" == "/etc/shadow" ] || [ "$1" == "/etc/gshadow" ] ; then awk -v LIMIT=$UGIDLIMIT -F: '($3>=LIMIT) && ($3!=65534) {print $1}' $CHROOT/etc/passwd | tee |egrep -f - $1 > /tmp/fileto.mig; fi
       IFS=$'\n'
       for i in $(cat /tmp/fileto.mig)
       do

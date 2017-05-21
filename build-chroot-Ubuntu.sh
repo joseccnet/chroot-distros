@@ -144,8 +144,19 @@ echo "deb http://archive.ubuntu.com/ubuntu $version main restricted universe mul
 echo "deb http://archive.ubuntu.com/ubuntu $version-security main restricted universe multiverse" >> $CHROOT/etc/apt/sources.list
 echo "deb http://archive.ubuntu.com/ubuntu $version-updates main restricted universe multiverse" >> $CHROOT/etc/apt/sources.list
 
-./mount_umount-chroot.sh $1 mount
+$(dirname $0)/mount_umount-chroot.sh $1 mount
 
+if [ "$version" == "trusty" ] ; then
+   echo "Aplicando FIX(Workarround) a 'udev' y 'cron'. Posiblemente otros paquete necesiten algo similar..."
+   cp $CHROOT/etc/init.d/cron $CHROOT/etc/init.d/cron.original #backup
+   cp $CHROOT/etc/init.d/udev $CHROOT/etc/init.d/udev.original #backup
+   rm -vf $CHROOT/etc/init.d/cron $CHROOT/etc/init.d/udev
+   cp -vf $(dirname $0)/ubuntu/trusty_etc_init.d_cron $CHROOT/etc/init.d/cron
+   cp -vf $(dirname $0)/ubuntu/trusty_etc_init.d_udev $CHROOT/etc/init.d/udev
+   chmod 750 $CHROOT/etc/init.d/cron $CHROOT/etc/init.d/udev
+   $(dirname $0)/mount_umount-chroot.sh $1 umount
+   $(dirname $0)/mount_umount-chroot.sh $1 mount
+fi
 chroot $CHROOT /bin/bash -c "apt-get update && apt-get -y upgrade && apt-get clean all"
 
 echo -e "\n- - - - RESUMEN- - - -\n"
