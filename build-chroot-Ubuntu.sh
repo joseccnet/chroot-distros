@@ -25,19 +25,25 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
-echo -e "#Artful Aardvark - 17.10
-#Zesty - 17.04
-#Yakkety - 16.10
+echo -e "#Eoan Ermine - 19.10
+#Disco Dingo - 19.04
+#Cosmic Cuttlefish - 18.10
+#Bionic Beaver - 18.04 LTS
+#Artful Aardvark - 17.10 [old release]
+#Zesty - 17.04 [old release]
+#Yakkety - 16.10 [old release]
 #Xenial - 16.04 LTS
-#Wily - 15.10
-#Vivid - 15.04
-#Utopic - 14.10
+#Wily - 15.10 [old release]
+#Vivid - 15.04 [old release]
+#Utopic - 14.10 [old release]
 #Trusty - 14.04 LTS
-#Precise - 12.04 LTS
-#Lucid - 10.04 LTS
+#Precise - 12.04 LTS 
+#Lucid - 10.04 LTS [old release]
 "
+oldRelease=false
+
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [artful|zesty|yakkety|xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
+echo -e "$0 NombreJaula [eoan|disco|cosmic|bionic|artful|zesty|yakkety|xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
 exit -1
 fi
 
@@ -65,71 +71,57 @@ else
    exit -1
 fi
 
-if [ "$version" == "artful" ] ; then
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu artful $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu artful $CHROOT http://mirrors.kernel.org/ubuntu
+if [ "$version" == "eoan" ] ; then
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu eoan $CHROOT http://archive.ubuntu.com/ubuntu
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "disco" ] ; then
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu disco $CHROOT http://archive.ubuntu.com/ubuntu
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "cosmic" ] ; then
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu cosmic $CHROOT http://archive.ubuntu.com/ubuntu
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "bionic" ] ; then
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu bionic $CHROOT http://archive.ubuntu.com/ubuntu
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "artful" ] ; then
+   oldRelease=true
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu artful $CHROOT http://old-releases.ubuntu.com/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "zesty" ] ; then
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://mirrors.kernel.org/ubuntu
+   oldRelease=true
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://old-releases.ubuntu.com/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "yakkety" ] ; then
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu yakkety $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu yakkety $CHROOT http://mirrors.kernel.org/ubuntu
+   oldRelease=true
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu yakkety $CHROOT http://old-releases.ubuntu.com/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "xenial" ] ; then
-   #Default:
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "wily" ] ; then
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu wily $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu wily $CHROOT http://mirrors.kernel.org/ubuntu
+   oldRelease=true
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu wily $CHROOT http://old-releases.ubuntu.com/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "vivid" ] ; then
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu vivid $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu vivid $CHROOT http://mirrors.kernel.org/ubuntu
+   oldRelease=true
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu vivid $CHROOT http://old-releases.ubuntu.com/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "utopic" ] ; then
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu utopic $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu utopic $CHROOT http://mirrors.kernel.org/ubuntu
+   oldRelease=true
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu utopic $CHROOT http://old-releases.ubuntu.com/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "trusty" ] ; then
-   #Default:
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu trusty $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu trusty $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "precise" ] ; then
-   #Default:
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu precise $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu precise $CHROOT http://mirrors.kernel.org/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "lucid" ] ; then
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu lucid $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu lucid $CHROOT http://mirrors.kernel.org/ubuntu
+   oldRelease=true
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu lucid $CHROOT http://old-releases.ubuntu.com/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://archive.ubuntu.com/ubuntu
-   #Otras opciones de descarga:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://mirrors.kernel.org/ubuntu
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu eoan $CHROOT http://archive.ubuntu.com/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
@@ -138,11 +130,17 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 \n\nConfiguracion inicial de Servicios a iniciar:
 \nService:/etc/init.d/cron\n#Service:/etc/init.d/rsyslog\n"
 
+if [ $oldRelease ] ; then
+   archiveSite="old-releases"
+else
+   archiveSite="archive"
+fi
+
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
 #Repositorios Ubuntu Linux: https://help.ubuntu.com/community/Repositories
-echo "deb http://archive.ubuntu.com/ubuntu $version main restricted universe multiverse" > $CHROOT/etc/apt/sources.list
-echo "deb http://archive.ubuntu.com/ubuntu $version-security main restricted universe multiverse" >> $CHROOT/etc/apt/sources.list
-echo "deb http://archive.ubuntu.com/ubuntu $version-updates main restricted universe multiverse" >> $CHROOT/etc/apt/sources.list
+echo "deb http://${archiveSite}.ubuntu.com/ubuntu $version main restricted universe multiverse" > $CHROOT/etc/apt/sources.list
+echo "deb http://${archiveSite}.ubuntu.com/ubuntu $version-security main restricted universe multiverse" >> $CHROOT/etc/apt/sources.list
+echo "deb http://${archiveSite}.ubuntu.com/ubuntu $version-updates main restricted universe multiverse" >> $CHROOT/etc/apt/sources.list
 
 $(dirname $0)/mount_umount-chroot.sh $1 mount
 
