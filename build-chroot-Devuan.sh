@@ -3,7 +3,7 @@
 # Build a chroot with a Debian base install.
 # Author: josecc@gmail.com
 #
-#Devuan 1.0 (Debian 8.0 jessie) (Debian Without systemd)
+#Devuan Debian Without systemd
 #https://devuan.org/
 #--arch amd64 , i386
 
@@ -17,9 +17,14 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
-echo -e "Devuan 1.0 (Debian 8.0 jessie) (Debian Without systemd) https://devuan.org/\n"
+echo -e "Devuan. (Debian Without systemd) https://devuan.org/
+Devuan Jessie - Debian 8 Jessie
+Devuan ASCII - Debian 9 Stretch
+Devuan Beowulf - Debian 10 Buster
+Devuan Ceres - Debian Unstable Sid
+"
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [jessie [amd64|i386]]\n"
+echo -e "$0 NombreJaula [sid|buster|stretch|jessie [amd64|i386]]\n"
 exit -1
 fi
 
@@ -30,6 +35,7 @@ mkdir -p $CHROOT
 
 version=$2
 arch=$3
+paquetesadiocionalesDeb=$paquetesadiocionalesDevuan
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
 if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb,libc6-i386"; fi
@@ -38,15 +44,32 @@ echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
 if [ "$version" == "jessie" ] ; then
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://auto.mirror.devuan.org/merged
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://deb.devuan.org/merged
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-   echo -e "deb http://auto.mirror.devuan.org/merged jessie          main\ndeb http://auto.mirror.devuan.org/merged jessie-updates  main\ndeb http://auto.mirror.devuan.org/merged jessie-security main\n" > $CHROOT/etc/apt/sources.list
+   echo -e "deb http://deb.devuan.org/merged jessie          main\ndeb http://deb.devuan.org/merged jessie-security main\n" > $CHROOT/etc/apt/sources.list
+elif [ "$version" == "stretch" ] ; then
+   if [ ! -f /usr/share/debootstrap/scripts/ascii ] ; then ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/ascii; fi
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb ascii $CHROOT http://deb.devuan.org/merged
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+   echo -e "deb http://deb.devuan.org/merged ascii          main\ndeb http://deb.devuan.org/merged ascii-updates  main\ndeb http://deb.devuan.org/merged ascii-security main\n" > $CHROOT/etc/apt/sources.list
+elif [ "$version" == "buster" ] ; then
+   paquetesadiocionalesDeb=${paquetesadiocionalesDeb/mysql-client/mariadb-client}
+   if [ ! -f /usr/share/debootstrap/scripts/beowulf ] ; then ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/beowulf; fi
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb beowulf $CHROOT http://deb.devuan.org/merged
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+   echo -e "deb http://deb.devuan.org/merged beowulf          main\ndeb http://deb.devuan.org/merged beowulf-updates  main\ndeb http://deb.devuan.org/merged beowulf-security main\n" > $CHROOT/etc/apt/sources.list
+elif [ "$version" == "sid" ] ; then
+   paquetesadiocionalesDeb=${paquetesadiocionalesDeb/mysql-client/mariadb-client}
+   if [ ! -f /usr/share/debootstrap/scripts/ceres ] ; then ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/ceres; fi
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb ceres $CHROOT http://deb.devuan.org/merged
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+   echo -e "#deb http://deb.devuan.org/merged ceres          main\n#deb http://deb.devuan.org/merged ceres-updates  main\n#deb http://deb.devuan.org/merged ceres-security main\n" > $CHROOT/etc/apt/sources.list
 else
-   #Default:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://auto.mirror.devuan.org/merged
+   version="stretch"
+   if [ ! -f /usr/share/debootstrap/scripts/ascii ] ; then ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/ascii; fi
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb ascii $CHROOT http://deb.devuan.org/merged
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-   echo -e "deb http://auto.mirror.devuan.org/merged jessie          main\ndeb http://auto.mirror.devuan.org/merged jessie-updates  main\ndeb http://auto.mirror.devuan.org/merged jessie-security main\n" > $CHROOT/etc/apt/sources.list
+   echo -e "deb http://deb.devuan.org/merged ascii          main\ndeb http://deb.devuan.org/merged ascii-updates  main\ndeb http://deb.devuan.org/merged ascii-security main\n" > $CHROOT/etc/apt/sources.list
 fi
 
 mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHROOT. El archivo $CHROOT/etc/mychroot.conf segun necesidades.\n\n#Filesystems a montar:
@@ -58,11 +81,11 @@ echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychr
 
 ./mount_umount-chroot.sh $1 mount
 
-chroot $CHROOT /bin/bash -c "gpg --keyserver keyserver.ubuntu.com --recv-key  94532124541922FB; gpg -a --export 94532124541922FB | apt-key add - ; apt-get update && apt-get -y install deborphan && deborphan -a"
+chroot $CHROOT /bin/bash -c "apt-get update && apt-get -y install deborphan && deborphan -a"
 #chroot $CHROOT /usr/bin/apt-get update
 #chroot $CHROOT /usr/bin/apt-get -y install deborphan
 #chroot $CHROOT /usr/bin/deborphan -a
-for i in $(chroot $CHROOT /usr/bin/deborphan -a | awk '{print $2}' | egrep -v "exclude_pakage_name1|exclude_pakage_name2|deborphan|wget|openssh-|rsyslog"); do chroot $CHROOT /usr/bin/apt-get -y remove $i; done
+for i in $(chroot $CHROOT /usr/bin/deborphan -a | awk '{print $2}' | egrep -v "exclude_pakage_name1|exclude_pakage_name2|deborphan|wget|openssh-|rsyslog|devuan-keyring"); do chroot $CHROOT /usr/bin/apt-get -y remove $i; done
 chroot $CHROOT /bin/bash -c "apt-get -y upgrade && apt-get clean all"
 
 echo -e "\n- - - - RESUMEN- - - -\n"
