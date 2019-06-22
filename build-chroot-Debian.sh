@@ -3,6 +3,7 @@
 # Build a chroot with a Debian base install.
 # Author: josecc@gmail.com
 #
+#10.0 buster
 #9.0 stretch
 #8.0 jessie - 2015-04-25: Initial release: 8.0
 #7.0 wheezy May 4th 2013
@@ -21,9 +22,16 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
-echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [sid|stretch|jessie|wheezy|squeeze [amd64|i386]]\n"
-exit -1
+ echo -e "#10.0 buster
+#9.0 stretch
+#8.0 jessie - 2015-04-25: Initial release: 8.0
+#7.0 wheezy May 4th 2013
+#6.0 squeeze February 6th 2011
+"
+
+ echo -e "Nombre de Jaula requerido\nEjecute:\n"
+ echo -e "$0 NombreJaula [sid|buster|stretch|jessie|wheezy|squeeze [amd64|i386]]\n"
+ exit -1
 fi
 
 if [ ! -d $ROOTJAIL ] ; then mkdir -vp $ROOTJAIL; chmod 755 $ROOTJAIL; fi
@@ -36,11 +44,18 @@ arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
 if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb,libc6-i386"; fi
-if [ "$version" == "" ] ; then version="stretch"; fi
+if [ "$version" == "" ] ; then version="buster"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
-if [ "$version" == "stretch" ] ; then
+if [ "$version" == "buster" ] ; then
+   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb10,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb10; fi
+   #Default:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://http.debian.net/debian
+   #Otras opciones de descarga:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb buster $CHROOT http://httpredir.debian.org/debian
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "stretch" ] ; then
    if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb9,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb9; fi
    #Default:
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://http.debian.net/debian
@@ -49,21 +64,15 @@ if [ "$version" == "stretch" ] ; then
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "wheezy" ] ; then
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://http.debian.net/debian
-   #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://httpredir.debian.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb wheezy $CHROOT http://archive.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "squeeze" ] ; then
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb squeeze $CHROOT http://http.debian.net/debian
-   #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb squeeze $CHROOT http://httpredir.debian.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb squeeze $CHROOT http://archive.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "jessie" ] ; then
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://http.debian.net/debian
-   #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://httpredir.debian.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb jessie $CHROOT http://archive.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 elif [ "$version" == "sid" ] ; then
    #Default:
@@ -72,11 +81,11 @@ elif [ "$version" == "sid" ] ; then
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sid $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
-   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb9,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb9; fi #For Debian 9 stretch
+   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb10,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb10; fi #For Debian 10 buster
    #Default:
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://httpredir.debian.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb buster $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
@@ -87,9 +96,26 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
 if [ "$version" != "sid" ] ; then #SID no tiene updates por ser de desarrollo.
-   echo "deb http://httpredir.debian.org/debian/ $version main" > $CHROOT/etc/apt/sources.list
-   echo "deb http://httpredir.debian.org/debian/ $version-updates main" >> $CHROOT/etc/apt/sources.list
-   echo "deb http://security.debian.org/ $version/updates main" >> $CHROOT/etc/apt/sources.list
+   if [ "$version" == "buster" ] ; then
+      echo "deb http://httpredir.debian.org/debian/ buster main #contrib non-free" > $CHROOT/etc/apt/sources.list
+      echo "deb http://httpredir.debian.org/debian/ buster-updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+      echo "deb http://security.debian.org/ buster/updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+   elif [ "$version" == "stretch" ] ; then
+      echo "deb http://httpredir.debian.org/debian/ stretch main #contrib non-free" > $CHROOT/etc/apt/sources.list
+      echo "deb http://httpredir.debian.org/debian/ stretch-updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+      echo "deb http://security.debian.org/ stretch/updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+   elif [ "$version" == "jessie" ] ; then
+      echo "deb http://archive.debian.org/debian/ jessie main #contrib non-free" > $CHROOT/etc/apt/sources.list
+      echo "deb http://security.debian.org/ jessie/updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+      echo "#deb http://httpredir.debian.org/debian/ jessie-updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+   elif [ "$version" == "wheezy" ] ; then
+      echo "deb http://archive.debian.org/debian/ wheezy main #contrib non-free" > $CHROOT/etc/apt/sources.list
+   elif [ "$version" == "squeeze" ] ; then
+      echo "Acquire::Check-Valid-Until no;" > $CHROOT/etc/apt/apt.conf.d/99no-check-valid-until
+      echo "deb http://archive.debian.org/debian/ squeeze main #contrib non-free" > $CHROOT/etc/apt/sources.list
+      echo "deb http://archive.debian.org/debian/ squeeze-lts main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+      echo "#deb http://archive.debian.org/debian/ squeeze-proposed-updates main #contrib non-free #UPDATES." >> $CHROOT/etc/apt/sources.list
+   fi
 fi
 
 ./mount_umount-chroot.sh $1 mount
