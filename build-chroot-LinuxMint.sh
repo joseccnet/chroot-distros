@@ -3,6 +3,9 @@
 # Build a chroot with a Linux Mint base install.
 # Author: josecc@gmail.com
 #
+#Tessa 19.1
+#Tara 19
+#Sylvia 18.3
 #Sonya 18.2 - 2017??
 #Serena 18.1 - 2016_2017
 #Sarah 18 - 2016
@@ -22,7 +25,10 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
-echo -e "#Sonya 18.2 - 2017??
+echo -e "#Tessa 19.1
+#Tara 19
+#Sylvia 18.3
+#Sonya 18.2 - 2017??
 #Serena 18.1 - 2016_2017
 #Sarah 18 - 2016
 #Rosa 17.3 - 2015_2016
@@ -31,7 +37,7 @@ echo -e "#Sonya 18.2 - 2017??
 #Qiana 17 - 2014
 "
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [sonya|serena|sarah|rosa|rafaela|rebecca|qiana [amd64|i386]]\n"
+echo -e "$0 NombreJaula [tessa|tara|sylvia|sonya|serena|sarah|rosa|rafaela|rebecca|qiana [amd64|i386]]\n"
 exit -1
 fi
 
@@ -49,7 +55,25 @@ echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
 echo -e "\n ***Instalando la base Ubuntu Linux de la que depende Linux Mint ...***"
-if [ "$version" == "sonya" ] ; then
+if [ "$version" == "tessa" ] ; then
+   $(dirname $0)/build-chroot-Ubuntu.sh $1 bionic $arch #Linux Mint based on Ubuntu Bionic
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+   chroot $CHROOT/ /bin/bash -c "apt-get clean all"
+   cp -vf $(dirname $0)/linuxMint/19.1_tessa_etc_apt_preferences.d_official-package-repositories.pref $CHROOT/etc/apt/preferences.d/official-package-repositories.pref
+   cp -vf $(dirname $0)/linuxMint/19.1_tessa_etc_apt_sources.list.d_official-package-repositories.list $CHROOT/etc/apt/sources.list.d/official-package-repositories.list
+elif [ "$version" == "tara" ] ; then
+   $(dirname $0)/build-chroot-Ubuntu.sh $1 bionic $arch #Linux Mint based on Ubuntu Bionic
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+   chroot $CHROOT/ /bin/bash -c "apt-get clean all"
+   cp -vf $(dirname $0)/linuxMint/19_tara_etc_apt_preferences.d_official-package-repositories.pref $CHROOT/etc/apt/preferences.d/official-package-repositories.pref
+   cp -vf $(dirname $0)/linuxMint/19_tara_etc_apt_sources.list.d_official-package-repositories.list $CHROOT/etc/apt/sources.list.d/official-package-repositories.list
+elif [ "$version" == "sylvia" ] ; then
+   $(dirname $0)/build-chroot-Ubuntu.sh $1 xenial $arch #Linux Mint based on Ubuntu Xenial
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+   chroot $CHROOT/ /bin/bash -c "apt-get clean all"
+   cp -vf $(dirname $0)/linuxMint/18.3_sylvia_etc_apt_preferences.d_official-package-repositories.pref $CHROOT/etc/apt/preferences.d/official-package-repositories.pref
+   cp -vf $(dirname $0)/linuxMint/18.3_sylvia_etc_apt_sources.list.d_official-package-repositories.list $CHROOT/etc/apt/sources.list.d/official-package-repositories.list
+elif [ "$version" == "sonya" ] ; then
    $(dirname $0)/build-chroot-Ubuntu.sh $1 xenial $arch #Linux Mint based on Ubuntu Xenial
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
    chroot $CHROOT/ /bin/bash -c "apt-get clean all"
