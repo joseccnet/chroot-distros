@@ -3,16 +3,7 @@
 # Build a chroot with a Ubuntu base install.
 # Author: josecc@gmail.com
 #
-#Artful Aardvark - 17.10
-#Zesty - 17.04
-#Yakkety - 16.10
-#Xenial - 16.04 LTS
-#Wily - 15.10
-#Vivid - 15.04
-#Utopic - 14.10
-#Trusty - 14.04 LTS
-#Precise - 12.04 LTS
-#Lucid - 10.04 LTS
+# http://archive.ubuntu.com/ubuntu/dists/ && https://old-releases.ubuntu.com/ubuntu/dists/
 #--arch amd64 , i386
 
 source $(dirname $0)/chroot.conf
@@ -25,9 +16,17 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
-echo -e "#Eoan Ermine - 19.10
-#Disco Dingo - 19.04
-#Cosmic Cuttlefish - 18.10
+echo -e "#Mantic Minotaur - 23.10
+#Lunar Lobster - 23.04
+#Kinetic Kudu - 22.10
+#Jammy Jellyfish - 22.04 LTS
+#Impish Indri - 21.10 [old release]
+#Hirsute Hippo - 21.04 [old release]
+#Groovy Gorilla - 20.10 [old release]
+#Focal Fossa - 20.04 LTS
+#Eoan Ermine - 19.10 [old release]
+#Disco Dingo - 19.04 [old release]
+#Cosmic Cuttlefish - 18.10 [old release]
 #Bionic Beaver - 18.04 LTS
 #Artful Aardvark - 17.10 [old release]
 #Zesty - 17.04 [old release]
@@ -37,13 +36,13 @@ echo -e "#Eoan Ermine - 19.10
 #Vivid - 15.04 [old release]
 #Utopic - 14.10 [old release]
 #Trusty - 14.04 LTS
-#Precise - 12.04 LTS 
+#Precise - 12.04 LTS [old release]
 #Lucid - 10.04 LTS [old release]
 "
 oldRelease=false
 
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [eoan|disco|cosmic|bionic|artful|zesty|yakkety|xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
+echo -e "$0 NombreJaula [mantic|lunar|kinetic|jammy|impish|hirsute|groovy|focal|eoan|disco|cosmic|bionic|artful|zesty|yakkety|xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
 exit -1
 fi
 
@@ -71,70 +70,22 @@ else
    exit -1
 fi
 
-if [ "$version" == "eoan" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu eoan $CHROOT http://archive.ubuntu.com/ubuntu
+#Debootstrap
+echo "+ Intentando1 http://archive.ubuntu.com/ubuntu/dists/$version/ ..."
+debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu $version $CHROOT http://archive.ubuntu.com/ubuntu
+if [ "$?" != "0" ] ; then
+   echo "+ Intentando2 https://old-releases.ubuntu.com/ubuntu/dists/$version/ ..."
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu $version $CHROOT http://old-releases.ubuntu.com/ubuntu
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "disco" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu disco $CHROOT http://archive.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "cosmic" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu cosmic $CHROOT http://archive.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "bionic" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu bionic $CHROOT http://archive.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "artful" ] ; then
-   oldRelease=true
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu artful $CHROOT http://old-releases.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "zesty" ] ; then
-   oldRelease=true
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu zesty $CHROOT http://old-releases.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "yakkety" ] ; then
-   oldRelease=true
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu yakkety $CHROOT http://old-releases.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "xenial" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu xenial $CHROOT http://archive.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "wily" ] ; then
-   oldRelease=true
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu wily $CHROOT http://old-releases.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "vivid" ] ; then
-   oldRelease=true
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu vivid $CHROOT http://old-releases.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "utopic" ] ; then
-   oldRelease=true
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu utopic $CHROOT http://old-releases.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "trusty" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu trusty $CHROOT http://archive.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "precise" ] ; then
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu precise $CHROOT http://archive.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
-elif [ "$version" == "lucid" ] ; then
-   oldRelease=true
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu lucid $CHROOT http://old-releases.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+   archiveSite="old-releases"
 else
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesUbuntu eoan $CHROOT http://archive.ubuntu.com/ubuntu
-   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+   archiveSite="archive"
 fi
 
 mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHROOT. El archivo $CHROOT/etc/mychroot.conf segun necesidades.\n\n#Filesystems a montar:
 \nFS:/proc\nFS:/dev\nFS:/dev/pts\nFS:/sys\nFS:/home\n
 \n\nConfiguracion inicial de Servicios a iniciar:
 \nService:/etc/init.d/cron\n#Service:/etc/init.d/rsyslog\n"
-
-if [ $oldRelease ] ; then
-   archiveSite="old-releases"
-else
-   archiveSite="archive"
-fi
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
 #Repositorios Ubuntu Linux: https://help.ubuntu.com/community/Repositories
