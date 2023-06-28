@@ -97,7 +97,8 @@ elif [ "$2" == "mount" ] ; then
       echo " + $CHROOT$i"
       mkdir -p $CHROOT$i
       mount | grep " on $CHROOT$i" > /dev/null
-      if [ "$?" == "1" ] ; then mount --bind $i $CHROOT$i; fi
+      #if [ "$?" == "1" ] ; then mount --bind $i $CHROOT$i; fi
+      if [ "$?" == "1" ] ; then mount -o newinstance,bind $i $CHROOT$i || mount --bind $i $CHROOT$i; fi
    done
 
    migraarchivo() #procesa y migra /etc/passwd, /etc/group, /etc/shadow, /etc/gshadow
