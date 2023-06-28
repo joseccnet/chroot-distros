@@ -3,6 +3,10 @@
 # Build a chroot with a Debian base install.
 # Author: josecc@gmail.com
 #
+#14.0 forky
+#13.0 trixie
+#12.0 bookworm
+#11.0 bullseye
 #10.0 buster
 #9.0 stretch
 #8.0 jessie - 2015-04-25: Initial release: 8.0
@@ -22,7 +26,11 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
- echo -e "#10.0 buster
+ echo -e "#14.0 forky
+#13.0 trixie
+#12.0 bookworm
+#11.0 bullseye
+#10.0 buster
 #9.0 stretch
 #8.0 jessie - 2015-04-25: Initial release: 8.0
 #7.0 wheezy May 4th 2013
@@ -30,7 +38,7 @@ if [ "$1" == "" ]; then
 "
 
  echo -e "Nombre de Jaula requerido\nEjecute:\n"
- echo -e "$0 NombreJaula [sid|buster|stretch|jessie|wheezy|squeeze [amd64|i386]]\n"
+ echo -e "$0 NombreJaula [sid|forky|trixie|bookworm|bullseye|buster|stretch|jessie|wheezy|squeeze [amd64|i386]]\n"
  exit -1
 fi
 
@@ -44,11 +52,49 @@ arch=$3
 if [ "$arch" == "" ] ; then arch=$(uname -m); fi
 if [ "$arch" == "x86_64" ] ; then arch="amd64"; fi
 if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb,libc6-i386"; fi
-if [ "$version" == "" ] ; then version="buster"; fi
+if [ "$version" == "" ] ; then version="forky"; fi
 echo "Instalando..."
 echo -e "VERSION: $version \t ARCH: $arch"
 
-if [ "$version" == "buster" ] ; then
+#Hacer que debootstrap me permita instalar Debian LINUX:
+if [ -d /usr/share/debootstrap/scripts ] ; then
+   if [ ! -f /usr/share/debootstrap/scripts/$version ] ; then
+      ln -s /usr/share/debootstrap/scripts/sid /usr/share/debootstrap/scripts/$version
+   fi
+else
+   echo -e "Version de debootstrap no soporta instalar Debian Linux. Salir.\n"
+   exit -1
+fi
+
+if [ "$version" == "forky" ] ; then
+   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb14,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb14; fi
+   #Default:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb forky $CHROOT http://http.debian.net/debian
+   #Otras opciones de descarga:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb forky $CHROOT http://httpredir.debian.org/debian
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "trixie" ] ; then
+   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb13,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb13; fi
+   #Default:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb trixie $CHROOT http://http.debian.net/debian
+   #Otras opciones de descarga:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb trixie $CHROOT http://httpredir.debian.org/debian
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "bookworm" ] ; then
+   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb12,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb12; fi
+   #Default:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb bookworm $CHROOT http://http.debian.net/debian
+   #Otras opciones de descarga:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb bookworm $CHROOT http://httpredir.debian.org/debian
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "bullseye" ] ; then
+   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb11,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb11; fi
+   #Default:
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb bullseye $CHROOT http://http.debian.net/debian
+   #Otras opciones de descarga:
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb bullseye $CHROOT http://httpredir.debian.org/debian
+   if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
+elif [ "$version" == "buster" ] ; then
    if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb10,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb10; fi
    #Default:
    #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://http.debian.net/debian
@@ -81,11 +127,11 @@ elif [ "$version" == "sid" ] ; then
    debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb sid $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 else
-   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb10,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb10; fi #For Debian 10 buster
+   if [ "$arch" == "amd64" ] ; then paquetesadiocionalesDeb="$paquetesadiocionalesDeb14,libc6-i386"; else paquetesadiocionalesDeb=$paquetesadiocionalesDeb14; fi #For Debian 14 forky
    #Default:
-   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb stretch $CHROOT http://http.debian.net/debian
+   #debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb forky $CHROOT http://http.debian.net/debian
    #Otras opciones de descarga:
-   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb buster $CHROOT http://httpredir.debian.org/debian
+   debootstrap --arch $arch --verbose --no-check-gpg --verbose --include=$paquetesadiocionalesDeb forky $CHROOT http://httpredir.debian.org/debian
    if [ "$?" != "0" ] ; then echo "Ocurrio un error? Revise."; exit -1; fi
 fi
 
@@ -96,7 +142,23 @@ mychrootconf="#Configuracion inicial de Filesystems a montar para la Jaula $CHRO
 
 echo -e $mychrootconf > $CHROOT/etc/mychroot.conf && chmod 640 $CHROOT/etc/mychroot.conf
 if [ "$version" != "sid" ] ; then #SID no tiene updates por ser de desarrollo.
-   if [ "$version" == "buster" ] ; then
+   if [ "$version" == "forky" ] ; then
+      echo "deb http://httpredir.debian.org/debian/ forky main #contrib non-free" > $CHROOT/etc/apt/sources.list
+      echo "deb http://httpredir.debian.org/debian/ forky-updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+      echo "deb http://security.debian.org/debian-security forky-security main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+   elif [ "$version" == "trixie" ] ; then
+      echo "deb http://httpredir.debian.org/debian/ trixie main #contrib non-free" > $CHROOT/etc/apt/sources.list
+      echo "deb http://httpredir.debian.org/debian/ trixie-updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+      echo "deb http://security.debian.org/debian-security trixie-security main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+   elif [ "$version" == "bookworm" ] ; then
+      echo "deb http://httpredir.debian.org/debian/ bookworm main #contrib non-free" > $CHROOT/etc/apt/sources.list
+      echo "deb http://httpredir.debian.org/debian/ bookworm-updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+      echo "deb http://security.debian.org/debian-security bookworm-security main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+   elif [ "$version" == "bullseye" ] ; then
+      echo "deb http://httpredir.debian.org/debian/ bullseye main #contrib non-free" > $CHROOT/etc/apt/sources.list
+      echo "deb http://httpredir.debian.org/debian/ bullseye-updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+      echo "deb http://security.debian.org/debian-security bullseye-security main #contrib non-free" >> $CHROOT/etc/apt/sources.list
+   elif [ "$version" == "buster" ] ; then
       echo "deb http://httpredir.debian.org/debian/ buster main #contrib non-free" > $CHROOT/etc/apt/sources.list
       echo "deb http://httpredir.debian.org/debian/ buster-updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
       echo "deb http://security.debian.org/ buster/updates main #contrib non-free" >> $CHROOT/etc/apt/sources.list
