@@ -16,7 +16,10 @@ echo -e " - - - - - - - - - - - - - - - - - -\n"
 
 
 if [ "$1" == "" ]; then
-echo -e "#Mantic Minotaur - 23.10
+echo -e "#Plucky Puffin - 25.04
+#Oracular Oriole - 24.10
+#Noble Numbat - 24.04 LTS
+#Mantic Minotaur - 23.10
 #Lunar Lobster - 23.04
 #Kinetic Kudu - 22.10
 #Jammy Jellyfish - 22.04 LTS
@@ -42,7 +45,7 @@ echo -e "#Mantic Minotaur - 23.10
 oldRelease=false
 
 echo -e "Nombre de Jaula requerido\nEjecute:\n"
-echo -e "$0 NombreJaula [mantic|lunar|kinetic|jammy|impish|hirsute|groovy|focal|eoan|disco|cosmic|bionic|artful|zesty|yakkety|xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
+echo -e "$0 NombreJaula [plucky|oracular|noble|mantic|lunar|kinetic|jammy|impish|hirsute|groovy|focal|eoan|disco|cosmic|bionic|artful|zesty|yakkety|xenial|wily|vivid|utopic|trusty|precise|lucid [amd64|i386]]\n"
 exit -1
 fi
 
